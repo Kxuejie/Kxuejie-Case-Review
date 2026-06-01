@@ -1,84 +1,156 @@
-# K Xuejie Case Review Skill
+# K-Xuejie-Case-Review
 
-`KS-case-review` is a K Xuejie Skill for reviewing consulting case interview transcripts.
+K 学姐的 Case Interview 点评复盘 skill。
 
-Paste a case interview transcript converted from audio, and the skill will identify the interviewer and candidate, diagnose the candidate's real performance, and generate a structured review report with concrete evidence and next-step practice suggestions.
+把 Case mock 的录音转文字文稿丢进去，它会自动识别面试官和面试者，判断题型，并生成一份完整复盘：真实水平、关键问题、框架漏点、下一步怎么练，都直接说清楚。
 
-> KS = K Xuejie Skill. This is the first skill in the K Xuejie consulting skill series.
+可在 Claude Code、Codex、Cursor、Trae Solo 等任意支持 skill / system prompt 的 Agent 上使用。
 
-## What It Does
+KS = K Xuejie Skill。`KS-case-review` 是 K 学姐咨询 skill 系列的第一个工具。
 
-This skill reviews one-on-one consulting case interview transcripts and produces:
+作者：K 学姐（全网同名「K 学姐」，可自行搜索）
 
-- 6-dimension scoring
-- Clarify, framework, communication, business thinking, calculation, and industry knowledge diagnosis
-- Framework quality assessment
-- Key case-solving blind spots
-- A sharp one-sentence summary of the biggest issue
-- Major problem list with transcript-based evidence
-- Focused improvement direction and concrete practice actions
-- Optional "business insight preview" for the case itself
+所有内容开放，可以直接安装使用，也可以只取 `SKILL.md` 和参考库，放进你自己的 Agent 工作台。
 
-## Input
+---
 
-Use a transcript converted from a case interview recording.
+## 这个 skill 做什么
 
-The transcript can be:
+`KS-case-review` 用来复盘战略咨询 Case Interview 的一问一答文稿。
 
-- pasted directly into chat
-- provided as a local text file path
-- labeled with speakers such as `Interviewer` / `Candidate`, `Q` / `A`, or raw speaker labels such as `SPEAKER_00`
+它不是泛泛地说“表达不错”“框架还行”，而是按真实 Case 面试标准，逐段看候选人的动作：
 
-The skill will infer which speaker is the interviewer and which speaker is the candidate.
+- clarify 有没有问对
+- 框架有没有说清楚
+- 表达是不是结论前置
+- 有没有强观点和 brainstorm 支撑
+- 计算流程是否规范
+- 行业认知是否够用
+- 有没有主动推进 case
+- 最后 recommendation 是否站得住
 
-## Output Structure
+输出会直接引用文稿里的具体原话，让学员知道自己到底哪句话、哪个动作出了问题。
 
-The main review report includes:
+---
 
-1. **6-Dimension Scoring**  
-   Scores the candidate on clarify quality, framework communication, concise expression, viewpoint strength and case leadership, calculation process, and industry knowledge.
+## 输入什么
 
-2. **Framework Quality Diagnosis**  
-   Separates "how the framework was communicated" from "whether the framework itself was strong."
+输入一段 Case mock 的录音转文字文稿即可。
 
-3. **Key Case-Solving Gaps**  
-   Identifies the missing branches that materially affect the case conclusion.
+可以是：
 
-4. **One-Sentence Summary**  
-   A direct diagnosis of the candidate's biggest problem.
+- 直接粘贴在对话里
+- 本地 `.txt` / `.md` 文稿路径
+- 带有 `面试官 / 学员`、`Q / A`、`SPEAKER_00 / SPEAKER_01` 等标签的原始转录文本
 
-5. **Major Problem List**  
-   Lists the most important issues with evidence from the transcript.
+即使文稿只有 `SPEAKER_00`、`SPEAKER_01` 这种标签，skill 也会先根据内容自动判断谁是面试官、谁是面试者。
 
-6. **Improvement Direction and Practice Plan**  
-   Gives one priority improvement direction, concrete drills, and quick fixes for the next case.
+---
 
-## Business Insight Preview
+## 输出包含哪些部分
 
-After the performance review, the skill can optionally generate a business insight preview for the case itself.
+### 1. 六维打分
 
-This is a light version of a standard case answer. It uses the built-in framework library to explain:
+从 6 个维度给出 10 分制评分：
 
-- the key industry logic behind the case
-- a standard framework mapped to the given case facts
-- brainstorm directions the candidate missed
-- better "hypothesis + judgment" phrasing
-- 1-2 consultant-style takeaways
-- a concise case conclusion
+- Clarify 质量
+- 框架介绍方式
+- 表达凝练度 / 结论前置
+- 观点强度、佐证与主动推进
+- 计算流程
+- 行业认知
 
-This helps the candidate understand not only "how I performed," but also "how this case should be thought about."
+每个维度都会写：
 
-## Installation
+- 分数
+- 一句话判断
+- 文稿证据
+- 具体改进动作
 
-Clone this repository into your local skills directory, or copy the repository folder into your Codex / agent skills folder.
+### 2. 框架质量诊断
 
-Example:
+单独判断候选人的框架本身是否对齐 case 核心问题。
+
+这里会区分两件事：
+
+- “框架有没有讲清楚”
+- “框架本身是不是好”
+
+很多候选人能说出一个框架，但漏掉最关键的 branch。这个部分专门抓这种问题。
+
+### 3. Case 拆解关键漏点
+
+对照内置标准框架库，挑出 2-4 个真正影响结论的漏点。
+
+不会把标准答案整篇倒出来，只抓最关键的地方：
+
+- 漏了什么
+- 为什么重要
+- 如果没漏，结论会怎么变
+
+### 4. 一句话总结
+
+用一句话戳中本场最大的核心问题。
+
+例如：
+
+> 你不是不会拆 M&A，你是把 PE 收购做成了普通公司买资产：看了市场和标的，却没回答 PE 到底靠什么赚钱。
+
+### 5. 重大问题清单
+
+从整场表现里挑 2-4 个最严重的问题，按严重程度排序。
+
+每个问题都会写：
+
+- 问题是什么
+- 文稿证据是什么
+- 真实面试里会造成什么后果
+
+### 6. 重点提升方向和练习建议
+
+不会给空泛建议，比如“加强商业思维”。
+
+它会判断学员现在最该补的是：
+
+- 基础动作：clarify、框架、计算、表达
+- 还是进阶能力：行业认知、观点强度、brainstorm、case leadership
+
+然后给 3-5 个具体练习动作，以及下一道 case 就能马上用的快招。
+
+---
+
+## 商业认知速览
+
+做完“你刚才表现如何”的复盘后，skill 还可以继续做一份「商业认知速览」。
+
+这部分不是继续点评表现，而是用内置标准框架库分析这道 case 本身，接近一份轻量版标准答案。
+
+它会补上：
+
+- 这道 case 的关键行业认知
+- 标准框架应该怎么搭
+- 文稿里哪些点已经给了，哪些点应该继续 brainstorm
+- 候选人的弱表达应该怎么改成“假设 + 判断”
+- 1-2 条顾问视角的建议
+- 这道 case 的精炼结论
+
+它解决的是另一个问题：不只知道“我哪里做错了”，还知道“这道题本来应该怎么想”。
+
+---
+
+## 如何安装
+
+### 通用安装方式（适用于 Codex / Claude Code）
+
+如果你使用支持 skills 的 Agent，可以把这个仓库 clone 到你的 skills 目录。
+
+示例：
 
 ```powershell
 git clone https://github.com/love1272395498-beep/K-Xuejie-Case-Review.git "$env:USERPROFILE\.agents\skills\ks-case-review"
 ```
 
-The skill folder should contain:
+目录结构应类似：
 
 ```text
 ks-case-review/
@@ -90,35 +162,94 @@ ks-case-review/
     └── 常见问题与练习库.md
 ```
 
-## Usage
+### 手动安装
 
-Invoke the skill with:
+也可以下载这个仓库，把整个文件夹放到你的 skill 目录里。
+
+至少需要保留：
+
+- `SKILL.md`
+- `reference/Case框架库-精简版.md`
+- `reference/常见问题与练习库.md`
+
+---
+
+## 如何使用
+
+在对话里触发：
 
 ```text
 KS-case-review
 ```
 
-Example prompt:
-
-```text
-Use KS-case-review to review this case interview transcript:
-
-<paste transcript here>
-```
-
-Chinese prompt examples:
+或者直接说：
 
 ```text
 用 KS-case-review 帮我复盘这段 case 面试录音文稿。
+
+<粘贴文稿>
 ```
+
+也可以说：
 
 ```text
 这段 case 录音转文字帮我看看，指出学员真实水平和下一步怎么练。
 ```
 
+---
+
+## 内置内容
+
+这个 skill 由三部分组成：
+
+### 1. 复盘工作流
+
+定义完整复盘流程：
+
+- 识别角色
+- 识别题型
+- 调用标准框架
+- 六维打分
+- 框架诊断
+- 问题清单
+- 练习建议
+- 可选商业认知速览
+
+### 2. Case 框架库
+
+内置 9 类常见 Case 框架骨架：
+
+- Market Sizing
+- Profitability
+- Growth Strategy
+- Market Entry
+- Pricing
+- M&A
+- Operations
+- New Product Launch
+- Opportunity Assessment
+
+### 3. 常见问题与练习库
+
+整理 Case 面试里高频出现的问题，包括：
+
+- clarify 漏目标
+- 框架层级没说清
+- brainstorm 不足
+- 推进太被动
+- 计算流程不完整
+- 风险和下一步缺失
+- 行业认知薄
+
+并配套具体练习方法。
+
+---
+
 ## About K 学姐
 
-K 学姐是 Ex-MBB 咨询顾问，长期分享战略咨询面试、Case 训练和商业思维内容。这个 skill 基于 K 学姐日常做 Case 复盘的标准流程整理而成，目标是让每一次 mock 后的反馈更具体、更严格，也更能落到下一步练习。
+K 学姐是 Ex-MBB 咨询顾问，长期分享战略咨询面试、Case 训练和商业思维内容。
+
+这个 skill 基于 K 学姐日常做 Case 复盘的标准流程整理而成，目标是让每一次 mock 后的反馈更具体、更严格，也更能落到下一步练习。
 
 全网同名「K 学姐」，可自行搜索。
 
